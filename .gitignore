@@ -1,0 +1,6 @@
+node_modules/
+*.log
+.env
+//It tells Git to ignore unnecessary files.
+
+//git push -u origin main

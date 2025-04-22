@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Info</title>
+    <style>
+        #bdy {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        header {
+            color: rgb(76, 148, 230);
+            text-align: center;
+            padding-bottom: 30px;
+            font-weight: bold;
+            font-size: 30px;
+        }
+        #form {
+            height: auto;
+            width: 50%;
+            border: 2px solid rgb(76, 148, 230);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+        }
+        .btn {
+            margin: 10px;
+            height: 50px;
+            width: 100px;
+            background-color: rgb(76, 148, 230);
+            border: 1px white solid;
+            border-radius: 5px;
+            color: white;
+        }
+        .btn:hover {
+            background-color: #19c4e2;
+        }
+        .field {
+            height: 30px;
+            width: 200px;
+            padding: 5px;
+        }
+        #msgBlock, #errormsg {
+            text-align: center;
+            margin-top: 20px;
+        }
+        #errormsg {
+            color: red;
+        }
+    </style>
+</head>
+<body id="bdy">
+    <form id="form">
+        <header>Delete User</header>
+        <label>Id:</label>
+        <input type="text" id="id" name="id" placeholder="Enter ID" class="field">
+        <br><br>
+        <label>Password:</label>
+        <input type="password" name="password" id="paswd" placeholder="Enter password" class="field">
+        <br><br>
+        <input type="submit" value="Delete" id="dltusr" name="delete" class="btn">
+        <input type="button" name="back" id="back" value="Back" class="btn">
+    </form>
+    <h4 id="msgBlock"></h4>
+    <h3 id="errormsg"></h3>
+
+    <script>
+        const form = document.getElementById("form");
+        const msgBlock = document.getElementById("msgBlock");
+        const errormsg = document.getElementById("errormsg");
+
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            const id = document.getElementById("id").value.trim();
+            const paswd = document.getElementById("paswd").value.trim();
+
+            msgBlock.textContent = "";
+            errormsg.textContent = "";
+
+            // Validation
+            if (!id || !paswd) {
+                errormsg.textContent = "Both ID and Password are required!";
+                return;
+            }
+
+            if (paswd.length < 6) {
+                errormsg.textContent = "Password must be at least 6 characters long.";
+                return;
+            }
+
+            // All validations passed -> Send fetch request
+            fetch("/dltusr", {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ id, paswd })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    msgBlock.style.color = "red";
+                    msgBlock.textContent = data.error;
+                } else {
+                    msgBlock.style.color = "green";
+                    msgBlock.textContent = "User deleted successfully!";
+                    form.reset();
+                }
+            })
+            .catch(error => {
+                errormsg.textContent = "ERROR OCCURRED IN FETCH API.";
+            });
+        });
+
+        document.getElementById("back").addEventListener("click", () => {
+            window.location.href = "/";
+        });
+    </script>
+</body>
+</html>

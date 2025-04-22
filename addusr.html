@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create User</title>
+    <style>
+        #bdy {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        header {
+            color: rgb(76, 148, 230);
+            text-align: center;
+            padding-bottom: 30px;
+            font-weight: bold;
+            font-size: 30px;
+        }
+        #form {
+            height: auto;
+            width: 50%;
+            border: 2px solid rgb(76, 148, 230);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+        }
+        .btn {
+            margin: 10px;
+            height: 50px;
+            width: 100px;
+            background-color: rgb(76, 148, 230);
+            border: 1px white solid;
+            border-radius: 5px;
+            color: white;
+        }
+        .btn:hover {
+            background-color: #19c4e2;
+        }
+        .field {
+            height: 30px;
+            width: 200px;
+            padding: 5px;
+        }
+        #msgBlock {
+            text-align: center;
+            margin-top: 20px;
+        }
+        #errormsg {
+            text-align: center;
+            color: red;
+        }
+    </style>
+</head>
+
+<body id="bdy">
+    <form id="form">
+        <header>Add User</header>
+        <label>Name:</label>
+        <input type="text" name="name" id="name" placeholder="Enter your name" class="field">
+        <br><br>
+        <label>Course:</label>
+        <input type="text" name="course" id="course" placeholder="Enter your course" class="field">
+        <br><br>
+        <label>Address:</label>
+        <input type="text" name="address" id="address" placeholder="Enter your address" class="field">
+        <br><br>
+        <label>Id:</label>
+        <input type="text" name="id" id="id" placeholder="Enter your ID" class="field">
+        <br><br>
+        <label>Email:</label>
+        <input type="email" name="email" id="email" placeholder="Enter your email" class="field">
+        <br><br>
+        <label>Password:</label>
+        <input type="password" name="password" id="password" placeholder="Enter password" class="field">
+        <br><br>
+        <input type="submit" id="addusr" value="Create User" name="submit" class="btn">
+        <input type="button" value="Back" id="back" class="btn">
+    </form>
+    <h3 id="msgBlock"></h3>
+    <h2 id="errormsg"></h2>
+
+    <script>
+        document.getElementById("form").addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById("name").value.trim();
+            const course = document.getElementById("course").value.trim();
+            const address = document.getElementById("address").value.trim();
+            const id = document.getElementById("id").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value.trim();
+
+            const msgBlock = document.getElementById("msgBlock");
+            const errormsg = document.getElementById("errormsg");
+            msgBlock.textContent = "";
+            errormsg.textContent = "";
+
+            // Simple validation
+            if (!name || !course || !address || !id || !email || !password) {
+                errormsg.textContent = "All fields are required!";
+                return;
+            }
+
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                errormsg.textContent = "Invalid email format.";
+                return;
+            }
+
+            // Password validation
+            if (password.length < 6) {
+                errormsg.textContent = "Password must be at least 6 characters long.";
+                return;
+            }
+
+            // All validations passed -> Send fetch request
+            fetch('/addusr', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id, paswd: password, name, email, address, course })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    msgBlock.style.color = "red";
+                    msgBlock.textContent = data.error;
+                } else {
+                    msgBlock.style.color = "green";
+                    msgBlock.textContent = "User Entered Successfully!";
+                    document.getElementById("form").reset();
+                }
+            })
+            .catch(error => {
+                errormsg.textContent = "ERROR OCCURRED ";
+            });
+        });
+        document.getElementById("back").addEventListener("click", () => {
+            window.location.href = "/";
+        });
+    </script>
+</body>
+</html>

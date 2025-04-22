@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crud operations</title>
+    <style>
+        /* #display{
+            display:block;
+            align-items: center;
+            justify-content: center;
+        } */
+        #head {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgb(76, 148, 230);
+        }
+
+        #form {
+            height: 300px;
+            width: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px rgb(76, 148, 230) solid;
+            border-radius: 10px;
+            margin-left: 360px;
+        }
+
+        .btn {
+            margin: 10px;
+            height: 50px;
+            width: 100px;
+            background-color: rgb(76, 148, 230);
+            border: 1px white solid;
+            border-radius: 5px;
+            color: white;
+            transition: 2ms;
+            /* transform: translate(-50%, -50%); */
+        }
+
+        .btn:hover {
+            background-color: #19c4e2;
+            color: white;
+        }
+    </style>
+</head>
+
+<body id="display">
+    <h1 id="head">USER MANAGEMENT SYSTEM</h1>
+    <form id="form">
+        <input type="button" value="Add User" name="Add-User" id="addusr" class="btn">
+        <input type="button" value="Delete User" name="Add-User" id="dltusr" class="btn">
+        <input type="button" value="Update User" name="update-User" id="updusr" class="btn">
+         <input type="button" name="Display" id="disp" class="btn" value="display">
+    </form>
+    <script>
+        let addusr = document.getElementById("addusr")
+        let dltusr = document.getElementById("dltusr")
+        let updusr = document.getElementById("updusr")
+        let disp =document.getElementById("disp")
+        //  .addEventListener("click",()=>{
+        //     window.location.href="/disp"
+        //  })
+        addusr.addEventListener("click", (e) => {
+            window.location.href = "/addusr"
+        })
+        updusr.addEventListener("click", (e) => {
+            window.location.href = '/updusr'
+        })
+        dltusr.addEventListener("click", (e) => {
+            window.location.href='/dltusr'
+        })
+        disp.addEventListener("click", (e) => {
+           // e.defaultPrevented()
+             window.location.href='/disp'
+        })
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Display</title>
+  <style>
+    #bdy {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    header {
+      color: rgb(76, 148, 230);
+      text-align: center;
+      padding-bottom: 30px;
+      font-weight: bold;
+      font-size: 30px;
+    }
+    #form {
+      height: 50%;
+      width: 50%;
+      border: 2px solid rgb(76, 148, 230);
+      margin: 0px;
+      padding: 30px;
+      border-radius: 20px;
+      text-align: center;
+    }
+    .btn {
+      margin: 10px;
+      height: 50px;
+      width: 100px;
+      background-color: rgb(76, 148, 230);
+      border: 1px white solid;
+      border-radius: 5px;
+      color: white;
+    }
+    .field {
+      height: 30px;
+      width: 200px;
+      padding: 5px;
+    }
+    .btn:hover {
+      background-color: #19c4e2;
+      color: white;
+    }
+    th, tr, td {
+      border: 1px solid black;
+      padding: 10px;
+    }
+    #tbl {
+      border: 1px solid black;
+      visibility: hidden;
+      margin-top: 20px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body id="bdy">
+  <form id="form">
+    <header>Display Users</header>
+    <label for="">Id:</label>
+    <input type="text" id="id" name="id" placeholder="Enter id" class="field">
+    <br><br>
+    <label for="">Password:</label>
+    <input type="password" name="password" id="pswd" placeholder="Enter password" class="field">
+    <br><br>
+    <input type="button" value="Display" id="display" name="display" class="btn">
+    <input type="button" value="Display All" id="displayall" name="displayall" class="btn">
+    <input type="button" value="Back" id="back" name="back" class="btn">
+    <br><br>
+    <table id="tbl">
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Name</th>
+          <th>Course</th>
+          <th>Password</th>
+          <th>Email</th>
+        </tr>
+      </thead>
+      <tbody id="tblBody">
+      </tbody>
+    </table>
+  </form>
+
+  <h3 id="msgBlock"></h3>
+  <h2 id="errormsg"></h2>
+
+  <script>
+    const back = document.getElementById("back");
+    back.addEventListener("click", (e) => {
+      window.location.href = "/";
+    });
+
+    const display = document.getElementById("display");
+    const displayall = document.getElementById("displayall");
+    const msgBlock = document.getElementById("msgBlock");
+    const errormsg = document.getElementById("errormsg");
+    const table = document.getElementById("tbl");
+    const tableBody = document.getElementById("tblBody");
+
+    displayall.addEventListener("click", () => {
+      fetch('/disp', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.error) {
+          msgBlock.textContent = data.error;
+        } else {
+          table.style.visibility = "visible";
+          tableBody.innerHTML = "";
+          data.forEach(user => {
+            let row = `<tr>
+              <td>${user.id}</td>
+              <td>${user.name}</td>
+              <td>${user.course}</td>
+              <td>${user.password}</td>
+              <td>${user.email}</td>
+            </tr>`;
+            tableBody.innerHTML += row;
+          });
+        }
+      })
+      .catch(err => {
+        errormsg.textContent = 'Error in fetch API';
+      });
+    });
+
+    display.addEventListener("click", () => {
+      const id = document.getElementById("id").value.trim();
+      const paswd = document.getElementById("pswd").value.trim();
+
+      if (!id || !paswd) {
+        msgBlock.textContent = "Please fill both ID and Password fields.";
+        return;
+      }
+
+      fetch(`/disp/${id}/${paswd}`, {   // Sending ID and Password in URL
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      })
+      .then(response => response.json())
+      .then(user => {
+        if (user.error) {
+          msgBlock.textContent = user.error;
+        } else {
+          table.style.visibility = "visible";
+          tableBody.innerHTML = `<tr>
+            <td>${user.id}</td>
+            <td>${user.name}</td>
+            <td>${user.course}</td>
+            <td>${user.password}</td>
+            <td>${user.email}</td>
+          </tr>`;
+        }
+      })
+      .catch(error => {
+        errormsg.textContent = 'Invalid Credentials, Please try again';
+      });
+    });
+  </script>
+</body>
+</html>
