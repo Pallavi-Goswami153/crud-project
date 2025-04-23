@@ -4,3 +4,5 @@ node_modules/
 //It tells Git to ignore unnecessary files.
 
 //git push -u origin main
+
+//git remote add origin https://github.com/Pallavi-Goswami153/your-repo-name.git

@@ -9,27 +9,27 @@ const server = http.createServer((req, res) => {
 
     if (pathname === '/' && req.method === "GET") {
         res.setHeader("Content-Type", "text/html");
-        let data = fs.readFileSync("./my-crud-project/home.html", "utf-8");
+        let data = fs.readFileSync("./home.html", "utf-8");
         res.end(data);
     }
     else if (pathname === '/addusr' && req.method === "GET") {
         res.setHeader("Content-Type", "text/html");
-        let data = fs.readFileSync("./my-crud-project/addusr.html", "utf-8");
+        let data = fs.readFileSync("./addusr.html", "utf-8");
         res.end(data);
     }
     else if (pathname === '/dltusr' && req.method === "GET") {
         res.setHeader("Content-Type", "text/html");
-        let data = fs.readFileSync("./my-crud-project/dltusr.html", "utf-8");
+        let data = fs.readFileSync("./dltusr.html", "utf-8");
         res.end(data);
     }
     else if (pathname === '/disp' && req.method === "GET") {
         res.setHeader("Content-Type", "text/html");
-        let data = fs.readFileSync("./my-crud-project/disp.html", "utf-8");
+        let data = fs.readFileSync("./disp.html", "utf-8");
         res.end(data);
     }
     else if (pathname === '/updusr' && req.method === "GET") {
         res.setHeader("Content-Type", "text/html");
-        let data = fs.readFileSync("./my-crud-project/updusr.html", "utf-8");
+        let data = fs.readFileSync("./updusr.html", "utf-8");
         res.end(data);
     }
     else if (pathname === '/addusr' && req.method === "POST") {
